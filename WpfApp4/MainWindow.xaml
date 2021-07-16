@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp4"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="450" Width="900" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
+
+    <Window.Resources>
+        <Style TargetType="Button" x:Key="keyboardButton">
+            <Setter Property="IsHitTestVisible" Value="False"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+    </Window.Resources>
+    
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -28,37 +36,52 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Viewbox HorizontalAlignment="Center" Grid.Column="0" Grid.Row="0">
-                <TextBlock Name="SpeedLabel" Text="Speed = 0 chars/min"/>
-            </Viewbox>
-            <Viewbox HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0">
-                <TextBlock Name="FailsLabel" Text="Fails = 0"/>
-            </Viewbox>
-            <Grid Grid.Column="2" Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Viewbox HorizontalAlignment="Left" Grid.Column="0">
-                    <TextBlock Name="DifficultyLabel" Text="Difficulty = 1"/>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.Column="0" Grid.Row="0">
+                <Viewbox>
+                    <TextBlock Text="Speed = "/>
                 </Viewbox>
-            </Grid>
-            <Viewbox Grid.Column="3" Grid.Row="0" Margin="2" HorizontalAlignment="Left">
+                <Viewbox>
+                    <TextBlock Name="SpeedLabel" Text="-"/>
+                </Viewbox>
+                <Viewbox>
+                    <TextBlock Text=" chars/min"/>
+                </Viewbox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                <Viewbox>
+                    <TextBlock Text="Fails = "/>
+                </Viewbox>
+                <Viewbox>
+                    <TextBlock Name="FailsLabel" Text="0"/>
+                </Viewbox>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                <Viewbox>
+                    <TextBlock Text="Difficulty = "/>
+                </Viewbox>
+                <Viewbox>
+                    <TextBlock Name="DifficultyLabel" Text="1"/>
+                </Viewbox>
+                <Slider Minimum="0" Maximum="0" Value="0" IsEnabled="False" Width="90">
+                    
+                </Slider>
+            </StackPanel>
+            <Viewbox Grid.Column="3" Grid.Row="0" HorizontalAlignment="Left">
                 <CheckBox HorizontalAlignment="Left" VerticalAlignment="Center" x:Name="CaseSensetiveCheckBox" Content="Case sensitive"/>
             </Viewbox>
-            <Button Grid.Column="2" Grid.Row="1" Name="StartButton" Margin="2">
+            <Button Grid.Column="2" Grid.Row="1" Name="StartButton" Margin="2" Click="StartButton_Click">
                 <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock Text="Start"/>
                 </Viewbox>
             </Button>
-            <Button Grid.Column="3" Grid.Row="1" Name="StopButton" Margin="2">
+            <Button Grid.Column="3" Grid.Row="1" Name="StopButton" Margin="2" IsEnabled="False" Click="StopButton_Click">
                 <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock Text="Stop"/>
                 </Viewbox>
             </Button>
         </Grid>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Background="Aqua">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -67,7 +90,7 @@
                 <TextBlock x:Name="SourceText" Background="Aqua"/>
             </Viewbox>
             <Viewbox Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left">
-                <TextBlock x:Name="UserText" Background="Aqua"/>
+                <TextBox x:Name="UserText" Background="Aqua" MinWidth="20" IsEnabled="False"/>
             </Viewbox>
         </Grid>
 
@@ -88,156 +111,86 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            
-            <Button Background="LightCoral" x:Name="ButtonLeftTopCorner" Margin="2" Grid.Column="0">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+
+            <Button Style="{StaticResource keyboardButton}" Background="LightCoral" x:Name="ButtonOem3"  Grid.Column="0">
                 <Viewbox>
                     <TextBlock Text="`"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightCoral" x:Name="Button1" Margin="2" Grid.Column="1">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightCoral" x:Name="ButtonD1" Grid.Column="1">
                 <Viewbox>
                     <TextBlock Text="1"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightCoral" x:Name="Button2" Margin="2" Grid.Column="2">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightCoral" x:Name="ButtonD2" Grid.Column="2">
                 <Viewbox>
                     <TextBlock Text="2"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Khaki" x:Name="Button3" Margin="2" Grid.Column="3">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Khaki" x:Name="ButtonD3" Grid.Column="3">
                 <Viewbox>
                     <TextBlock Text="3"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="Button4" Margin="2" Grid.Column="4">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonD4" Grid.Column="4">
                 <Viewbox>
                     <TextBlock Text="4"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightBlue" x:Name="Button5" Margin="2" Grid.Column="5">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightBlue" x:Name="ButtonD5" Grid.Column="5">
                 <Viewbox>
                     <TextBlock Text="5"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightBlue" x:Name="Button6" Margin="2" Grid.Column="6">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightBlue" x:Name="ButtonD6" Grid.Column="6">
                 <Viewbox>
                     <TextBlock Text="6"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Violet" x:Name="Button7" Margin="2" Grid.Column="7">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Violet" x:Name="ButtonD7" Grid.Column="7">
                 <Viewbox>
                     <TextBlock Text="7"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Violet" x:Name="Button8" Margin="2" Grid.Column="8">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Violet" x:Name="ButtonD8" Grid.Column="8">
                 <Viewbox>
                     <TextBlock Text="8"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightCoral" x:Name="Button9" Margin="2" Grid.Column="9">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightCoral" x:Name="ButtonD9" Grid.Column="9">
                 <Viewbox>
                     <TextBlock Text="9"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Khaki" x:Name="Button0" Margin="2" Grid.Column="10">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Khaki" x:Name="ButtonD0" Grid.Column="10">
                 <Viewbox>
                     <TextBlock Text="0"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonMinus" Margin="2" Grid.Column="11">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonOemMinus" Grid.Column="11">
                 <Viewbox>
                     <TextBlock Text="-"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonEquals" Margin="2" Grid.Column="12">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonOemPlus" Grid.Column="12">
                 <Viewbox>
                     <TextBlock Text="="/>
                 </Viewbox>
             </Button>
 
-            <Button x:Name="ButtonBackSpace" Margin="2" Grid.Column="13">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGray" x:Name="ButtonBack" Grid.Column="13">
                 <Viewbox>
                     <TextBlock Text="Backspace"/>
                 </Viewbox>
@@ -262,155 +215,85 @@
                 <ColumnDefinition Width="1.5*"/>
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="ButtonTab" Margin="2" Grid.Column="0">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGray" x:Name="ButtonTab" Grid.Column="0">
                 <Viewbox>
                     <TextBlock Text="Tab"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightCoral" x:Name="ButtonQ" Margin="2" Grid.Column="1">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightCoral" x:Name="ButtonQ" Grid.Column="1">
                 <Viewbox>
                     <TextBlock Text="q"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Khaki" x:Name="ButtonW" Margin="2" Grid.Column="2">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Khaki" x:Name="ButtonW" Grid.Column="2">
                 <Viewbox>
                     <TextBlock Text="w"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonE" Margin="2" Grid.Column="3">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonE" Grid.Column="3">
                 <Viewbox>
                     <TextBlock Text="e"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightBlue" x:Name="ButtonR" Margin="2" Grid.Column="4">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightBlue" x:Name="ButtonR" Grid.Column="4">
                 <Viewbox>
                     <TextBlock Text="r"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightBlue" x:Name="ButtonT" Margin="2" Grid.Column="5">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightBlue" x:Name="ButtonT" Grid.Column="5">
                 <Viewbox>
                     <TextBlock Text="t"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Violet" x:Name="ButtonY" Margin="2" Grid.Column="6">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Violet" x:Name="ButtonY" Grid.Column="6">
                 <Viewbox>
                     <TextBlock Text="y"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Violet" x:Name="ButtonU" Margin="2" Grid.Column="7">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Violet" x:Name="ButtonU" Grid.Column="7">
                 <Viewbox>
                     <TextBlock Text="u"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightCoral" x:Name="ButtonI" Margin="2" Grid.Column="8">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightCoral" x:Name="ButtonI" Grid.Column="8">
                 <Viewbox>
                     <TextBlock Text="i"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Khaki" x:Name="ButtonO" Margin="2" Grid.Column="9">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Khaki" x:Name="ButtonO" Grid.Column="9">
                 <Viewbox>
                     <TextBlock Text="o"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonP" Margin="2" Grid.Column="10">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonP" Grid.Column="10">
                 <Viewbox>
                     <TextBlock Text="p"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonSkobka1" Margin="2" Grid.Column="11">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonOemOpenBrackets" Grid.Column="11">
                 <Viewbox>
                     <TextBlock Text="["/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonSkobka2" Margin="2" Grid.Column="12">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonOem6" Grid.Column="12">
                 <Viewbox>
                     <TextBlock Text="]"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonSlash" Margin="2" Grid.Column="13">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonOem5" Grid.Column="13">
                 <Viewbox>
                     <TextBlock Text="\"/>
                 </Viewbox>
@@ -434,144 +317,79 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="ButtonCapsLock" Margin="2" Grid.Column="0">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGray" x:Name="ButtonCapital" Grid.Column="0">
                 <Viewbox>
                     <TextBlock Text="CapsLock"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightCoral" x:Name="ButtonA" Margin="2" Grid.Column="1">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightCoral" x:Name="ButtonA" Grid.Column="1">
                 <Viewbox>
                     <TextBlock Text="a"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Khaki" x:Name="ButtonS" Margin="2" Grid.Column="2">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Khaki" x:Name="ButtonS" Grid.Column="2">
                 <Viewbox>
                     <TextBlock Text="s"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonD" Margin="2" Grid.Column="3">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonD" Grid.Column="3">
                 <Viewbox>
                     <TextBlock Text="d"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightBlue" x:Name="ButtonF" Margin="2" Grid.Column="4">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightBlue" x:Name="ButtonF" Grid.Column="4">
                 <Viewbox>
                     <TextBlock Text="f"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightBlue" x:Name="ButtonG" Margin="2" Grid.Column="5">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightBlue" x:Name="ButtonG" Grid.Column="5">
                 <Viewbox>
                     <TextBlock Text="g"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Violet" x:Name="ButtonH" Margin="2" Grid.Column="6">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Violet" x:Name="ButtonH" Grid.Column="6">
                 <Viewbox>
                     <TextBlock Text="h"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Violet" x:Name="ButtonJ" Margin="2" Grid.Column="7">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Violet" x:Name="ButtonJ" Grid.Column="7">
                 <Viewbox>
                     <TextBlock Text="j"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightCoral" x:Name="ButtonK" Margin="2" Grid.Column="8">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightCoral" x:Name="ButtonK" Grid.Column="8">
                 <Viewbox>
                     <TextBlock Text="k"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Khaki" x:Name="ButtonL" Margin="2" Grid.Column="9">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Khaki" x:Name="ButtonL" Grid.Column="9">
                 <Viewbox>
                     <TextBlock Text="l"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonColumn" Margin="2" Grid.Column="10">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonOem1" Grid.Column="10">
                 <Viewbox>
                     <TextBlock Text=";"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonQuote" Margin="2" Grid.Column="11">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonOemQuotes" Grid.Column="11">
                 <Viewbox>
                     <TextBlock Text="'"/>
                 </Viewbox>
             </Button>
 
-            <Button x:Name="ButtonEnter" Margin="2" Grid.Column="12">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" x:Name="ButtonEnter" Grid.Column="12">
                 <Viewbox>
                     <TextBlock Text="Enter"/>
                 </Viewbox>
@@ -594,133 +412,73 @@
                 <ColumnDefinition Width="2.5*"/>
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="ButtonShift" Margin="2" Grid.Column="0">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGray" x:Name="ButtonLeftShift" Grid.Column="0">
                 <Viewbox>
                     <TextBlock Text="Shift"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightCoral" x:Name="ButtonZ" Margin="2" Grid.Column="1">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightCoral" x:Name="ButtonZ" Grid.Column="1">
                 <Viewbox>
                     <TextBlock Text="z"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Khaki" x:Name="ButtonX" Margin="2" Grid.Column="2">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Khaki" x:Name="ButtonX" Grid.Column="2">
                 <Viewbox>
                     <TextBlock Text="x"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonC" Margin="2" Grid.Column="3">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonC" Grid.Column="3">
                 <Viewbox>
                     <TextBlock Text="c"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightBlue" x:Name="ButtonV" Margin="2" Grid.Column="4">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightBlue" x:Name="ButtonV" Grid.Column="4">
                 <Viewbox>
                     <TextBlock Text="v"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightBlue" x:Name="ButtonB" Margin="2" Grid.Column="5">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightBlue" x:Name="ButtonB" Grid.Column="5">
                 <Viewbox>
                     <TextBlock Text="b"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Violet" x:Name="ButtonN" Margin="2" Grid.Column="6">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Violet" x:Name="ButtonN" Grid.Column="6">
                 <Viewbox>
                     <TextBlock Text="n"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Violet" x:Name="ButtonM" Margin="2" Grid.Column="7">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Violet" x:Name="ButtonM" Grid.Column="7">
                 <Viewbox>
                     <TextBlock Text="m"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightCoral" x:Name="ButtonPeriod" Margin="2" Grid.Column="8">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightCoral" x:Name="ButtonOemComma" Grid.Column="8">
                 <Viewbox>
                     <TextBlock Text=","/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Khaki" x:Name="ButtonDot" Margin="2" Grid.Column="9">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Khaki" x:Name="ButtonOemPeriod" Grid.Column="9">
                 <Viewbox>
                     <TextBlock Text="."/>
                 </Viewbox>
             </Button>
 
-            <Button Background="LightGreen" x:Name="ButtonSlash2" Margin="2" Grid.Column="10">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGreen" x:Name="ButtonOemQuestion" Grid.Column="10">
                 <Viewbox>
                     <TextBlock Text="/"/>
                 </Viewbox>
             </Button>
 
-            <Button x:Name="ButtonShift2" Margin="2" Grid.Column="11">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGray" x:Name="ButtonRightShift" Grid.Column="11">
                 <Viewbox>
                     <TextBlock Text="Shift"/>
                 </Viewbox>
@@ -738,78 +496,43 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="ButtonControl" Margin="2" Grid.Column="0">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGray" x:Name="ButtonLeftCtrl" Grid.Column="0">
                 <Viewbox>
                     <TextBlock Text="Ctrl"/>
                 </Viewbox>
             </Button>
 
-            <Button x:Name="ButtonWindows" Margin="2" Grid.Column="1">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGray" x:Name="ButtonLWin" Grid.Column="1">
                 <Viewbox>
                     <TextBlock Text="Win"/>
                 </Viewbox>
             </Button>
 
-            <Button x:Name="ButtonAlt" Margin="2" Grid.Column="2">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGray" x:Name="ButtonSystem" Grid.Column="2">
                 <Viewbox>
                     <TextBlock Text="Alt"/>
                 </Viewbox>
             </Button>
 
-            <Button Background="Goldenrod" x:Name="ButtonSpace" Margin="2" Grid.Column="3">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="Goldenrod" x:Name="ButtonSpace" Grid.Column="3">
                 <Viewbox>
                     <TextBlock Text="Space"/>
                 </Viewbox>
             </Button>
 
-            <Button x:Name="ButtonControl2" Margin="2" Grid.Column="6">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGray" x:Name="ButtonRightCtrl" Grid.Column="6">
                 <Viewbox>
                     <TextBlock Text="Ctrl"/>
                 </Viewbox>
             </Button>
 
-            <Button x:Name="ButtonWindows2" Margin="2" Grid.Column="5">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGray" x:Name="ButtonRWin" Grid.Column="5">
                 <Viewbox>
                     <TextBlock Text="Win"/>
                 </Viewbox>
             </Button>
 
-            <Button x:Name="ButtonAlt2" Margin="2" Grid.Column="4">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="5"/>
-                    </Style>
-                </Button.Resources>
+            <Button Style="{StaticResource keyboardButton}" Background="LightGray" x:Name="ButtonSystem2" IsEnabled="False" Grid.Column="4">
                 <Viewbox>
                     <TextBlock Text="Alt"/>
                 </Viewbox>
